@@ -1,70 +1,63 @@
 import css from './ContactForm.module.css';
-import { Component } from 'react';
+import { useState } from 'react';
 
-class ContactForm extends Component {
-  state = {
-    name: '',
-    number: '',
+const ContactForm = ({ onSubmit }) => {
+  const [name, setName] = useState('');
+  const [number, setNumber] = useState('');
+
+  const handleNameChange = e => {
+    setName(e.target.value);
   };
 
-  handleNameChange = e => {
-    this.setState({ name: e.target.value });
-  };
-
-  handleNumberChange = e => {
+  const handleNumberChange = e => {
     const input = e.target.value.replace(/\D/g, '');
-    this.setState({ number: input });
+    setNumber(input);
   };
 
-  handleSubmit = e => {
+  const handleSubmit = e => {
     e.preventDefault();
-
-    const { name, number } = this.state;
 
     if (!name || !number) {
       alert('Please enter both name and number.');
       return;
     }
 
-    this.props.onSubmit({ name, number });
-    this.setState({ name: '', number: '' });
+    onSubmit({ name, number });
+    setName('');
+    setNumber('');
   };
 
-  render() {
-    const { name, number } = this.state;
-
-    return (
-      <form className={css.contactForm} onSubmit={this.handleSubmit}>
-        <label className={css.formLabel}>
-          Name:
-          <br />
-          <input
-            type="text"
-            className={css.formInput}
-            name="name"
-            required
-            value={name}
-            onChange={this.handleNameChange}
-          />
-        </label>
-        <label className={css.formLabel}>
-          Number:
-          <br />
-          <input
-            type="tel"
-            className={css.formInput}
-            name="number"
-            required
-            value={number}
-            onChange={this.handleNumberChange}
-          />
-        </label>
-        <button type="submit" className={css.formButton}>
-          Add contact
-        </button>
-      </form>
-    );
-  }
-}
+  return (
+    <form className={css.contactForm} onSubmit={handleSubmit}>
+      <label className={css.formLabel}>
+        Name:
+        <br />
+        <input
+          type="text"
+          className={css.formInput}
+          name="name"
+          required
+          value={name}
+          onChange={handleNameChange}
+        />
+      </label>
+      <label className={css.formLabel}>
+        Number:
+        <br />
+        <input
+          type="tel"
+          className={css.formInput}
+          name="number"
+          required
+          value={number}
+          onChange={handleNumberChange}
+        />
+      </label>
+      <button type="submit" className={css.formButton}>
+        Add contact
+      </button>
+    </form>
+  );
+};
 
 export default ContactForm;
